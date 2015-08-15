@@ -37,6 +37,7 @@ namespace IamUsingIt.Controllers
         }
 
         // GET: Resources/Create
+        [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
             return View();

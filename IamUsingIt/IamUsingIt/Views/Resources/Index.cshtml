@@ -32,9 +32,14 @@
                 if (User.IsInRole("Admin"))
                 {
                     @Html.ActionLink("Edit", "Edit", new {id = item.ResourceId})<text> |</text>
-                    @Html.ActionLink("Delete", "Delete", new {id = item.ResourceId});
+                    @Html.ActionLink("Delete", "Delete", new {id = item.ResourceId})
                 }
-            }
+                if (User.IsInRole("User"))
+                {
+                    @Html.ActionLink("View Reservations", "Index", "Reservations", new {resourceId = item.ResourceId}, null)<text> |</text>
+                    @Html.ActionLink("Make Reservation","Create","Reservations", new {resourceId = item.ResourceId}, null)
+                }
+}
                 
         </td>
     </tr>

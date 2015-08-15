@@ -52,6 +52,10 @@ namespace IamUsingIt.Context
                 .HasRequired(r => r.Resource)
                 .WithMany(r => r.Reservations)
                 .HasForeignKey(r => r.ResourceId);
+            modelBuilder.Entity<Reservation>()
+                .HasRequired(r => r.User)
+                .WithMany(u => u.Reservations)
+                .HasForeignKey(r => r.UserId);
         }
 
         public bool Seed(ApplicationDbContext context)
@@ -88,12 +92,10 @@ namespace IamUsingIt.Context
 
             success = this.AddUserToRole(userManager, user.Id, "User");
 
-            if (!success) return success;
-
-            
-
-            //success = this.AddUserToRole(userManager, user.Id, "User");
-            //if (!success) return success;
+            var resource = new Resource();
+            resource.Name = "TestResource";
+            context.Resources.Add(resource);
+            context.SaveChanges();
 
             return success;
 #endif
@@ -148,6 +150,8 @@ namespace IamUsingIt.Context
         }
 
         public System.Data.Entity.DbSet<IamUsingIt.Models.Resource> Resources { get; set; }
+
+        public System.Data.Entity.DbSet<IamUsingIt.Models.Reservation> Reservations { get; set; }
         //public icationUser> ApplicationUsers { get; set; }
 
     }
