@@ -19,6 +19,8 @@ namespace IamUsingIt.Models
 
         //Calculated Properties
         [NotMapped]
-        public string Status { get; set; }
+        public bool Free { get; set; }
+        [NotMapped]
+        public string CurrentUser { get; set; }
     }
 }

@@ -20,20 +20,21 @@ namespace IamUsingIt.Controllers
         [Authorize]
         public async Task<ActionResult> Index()
         {
-            var resources = await db.Resources.Include(r=>r.Reservations).ToListAsync();
+            var resources = await db.Resources.Include(r=>r.Reservations.Select(re=>re.User)).ToListAsync();
             foreach (var resource in resources)
             {
-                resource.Status = CalculateStatus(resource);
+                var currentUser = CalculateUser(resource);
+                resource.Free = currentUser == null;
+                resource.CurrentUser = currentUser;
             }
             return View(resources);
         }
 
-        private string CalculateStatus(Resource resource)
+        private string CalculateUser(Resource resource)
         {
-            if (resource.Reservations.Any(r=> r.Begin <= DateTime.Now && DateTime.Now <= r.End))
-                return "In Use";
-            else
-                return "Free";
+            var reservation =
+                resource.Reservations.SingleOrDefault(r => r.Begin <= DateTime.Now && DateTime.Now <= r.End);
+            return reservation?.Username;
         }
 
         // GET: Resources/Create

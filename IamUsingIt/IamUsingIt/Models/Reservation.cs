@@ -32,13 +32,5 @@ namespace IamUsingIt.Models
 
         [NotMapped]
         public string ResourceName => Resource.Name;
-
-        [NotMapped]
-        [DataType(DataType.Time)]
-        public DateTime BeginTime { get; set; }
-
-        [NotMapped]
-        [DataType(DataType.Time)]
-        public DateTime EndTime { get; set; }
     }
 }

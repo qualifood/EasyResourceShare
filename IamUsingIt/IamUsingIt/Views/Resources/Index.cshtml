@@ -4,10 +4,6 @@
     ViewBag.Title = "Index";
 }
 
-<div class="jumbotron">
-    <p class="lead">Resource Sharing Made Easy</p>
-</div>
-
 <h2>List of Resources</h2>
 
 <table class="table">
@@ -24,7 +20,15 @@
             @Html.DisplayFor(modelItem => item.Name)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Status)
+            @if (item.Free)
+            {
+                @Html.Label("Free", new { @class = "label label-success" })
+            }
+            else
+            {
+                @Html.Label("In use by: "+item.CurrentUser, new { @class = "label label-danger" })
+            }
+            
         </td>
         <td>
             @if (User.Identity.IsAuthenticated)
