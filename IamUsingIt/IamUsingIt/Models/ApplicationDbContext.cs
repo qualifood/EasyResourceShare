@@ -2,15 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using IamUsingIt.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 
-namespace IamUsingIt.Context
+namespace IamUsingIt.Models
 {
-    public partial class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
 
         public ApplicationDbContext()
@@ -33,7 +32,7 @@ namespace IamUsingIt.Context
         {
             if (modelBuilder == null)
             {
-                throw new ArgumentNullException("ModelBuilder is NULL");
+                throw new ArgumentNullException(nameof(modelBuilder));
             }
 
             base.OnModelCreating(modelBuilder);
@@ -43,8 +42,8 @@ namespace IamUsingIt.Context
             //Identity stuff
             modelBuilder.Entity<ApplicationUser>().ToTable("AspNetUsers");
             modelBuilder.Entity<ApplicationRole>().HasKey<string>(r => r.Id).ToTable("AspNetRoles");
-            modelBuilder.Entity<ApplicationUser>().HasMany<ApplicationUserRole>((ApplicationUser u) => u.UserRoles);
-            modelBuilder.Entity<ApplicationUserRole>().HasKey(r => new { UserId = r.UserId, RoleId = r.RoleId }).ToTable("AspNetUserRoles");
+            modelBuilder.Entity<ApplicationUser>().HasMany(u => u.UserRoles);
+            modelBuilder.Entity<ApplicationUserRole>().HasKey(r => new {r.UserId, r.RoleId }).ToTable("AspNetUserRoles");
             
             //Entities
             modelBuilder.Entity<Reservation>().HasKey(r => r.ReservationId).ToTable("Reservations");
@@ -61,36 +60,35 @@ namespace IamUsingIt.Context
         public bool Seed(ApplicationDbContext context)
         {
 #if DEBUG
-            bool success = false;
+            ApplicationRoleManager roleManager = new ApplicationRoleManager(new RoleStore<ApplicationRole>(context));
 
-            ApplicationRoleManager _roleManager = new ApplicationRoleManager(new RoleStore<ApplicationRole>(context));
+            var success = CreateRole(roleManager, "Admin", "Global Access");
+            if (!success) return false;
 
-            success = this.CreateRole(_roleManager, "Admin", "Global Access");
-            if (!success == true) return success;
-
-            success = this.CreateRole(_roleManager, "User", "Restricted to business domain activity");
-            if (!success) return success;
+            success = CreateRole(roleManager, "User", "Restricted to business domain activity");
+            if (!success) return false;
 
             ApplicationUserManager userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(context));
 
-            ApplicationUser adminUser = new ApplicationUser();
-            PasswordHasher passwordHasher = new PasswordHasher();
+            ApplicationUser adminUser = new ApplicationUser
+            {
+                UserName = "admin",
+                Email = "none@none.com"
+            };
 
-            adminUser.UserName = "admin";
-            adminUser.Email = "none@none.com";
 
-            IdentityResult result = userManager.Create(adminUser, "Test123!");
+            userManager.Create(adminUser, "Test123!");
 
-            success = this.AddUserToRole(userManager, adminUser.Id, "Admin");
+            AddUserToRole(userManager, adminUser.Id, "Admin");
 
             var user = new ApplicationUser();
 
             user.UserName = "user";
             user.Email = "none@none.com";
 
-            result = userManager.Create(user, "Test123!");
+            userManager.Create(user, "Test123!");
 
-            success = this.AddUserToRole(userManager, user.Id, "User");
+            success = AddUserToRole(userManager, user.Id, "User");
 
             var resource = new Resource();
             resource.Name = "TestResource";
@@ -99,7 +97,10 @@ namespace IamUsingIt.Context
 
             return success;
 #endif
+#pragma warning disable 162
+            // ReSharper disable once HeuristicUnreachableCode
             return true;
+#pragma warning restore 162
         }
 
         public bool RoleExists(ApplicationRoleManager roleManager, string name)
@@ -107,15 +108,15 @@ namespace IamUsingIt.Context
             return roleManager.RoleExists(name);
         }
 
-        public bool CreateRole(ApplicationRoleManager _roleManager, string name, string description = "")
+        public bool CreateRole(ApplicationRoleManager roleManager, string name, string description = "")
         {
-            var idResult = _roleManager.Create<ApplicationRole, string>(new ApplicationRole(name, description));
+            var idResult = roleManager.Create(new ApplicationRole(name, description));
             return idResult.Succeeded;
         }
 
-        public bool AddUserToRole(ApplicationUserManager _userManager, string userId, string roleName)
+        public bool AddUserToRole(ApplicationUserManager userManager, string userId, string roleName)
         {
-            var idResult = _userManager.AddToRole(userId, roleName);
+            var idResult = userManager.AddToRole(userId, roleName);
             return idResult.Succeeded;
         }
 
@@ -125,8 +126,9 @@ namespace IamUsingIt.Context
             var currentRoles = new List<IdentityUserRole>();
 
             currentRoles.AddRange(user.UserRoles);
-            foreach (ApplicationUserRole role in currentRoles)
+            foreach (var identityUserRole in currentRoles)
             {
+                var role = (ApplicationUserRole) identityUserRole;
                 userManager.RemoveFromRole(userId, role.Role.Name);
             }
         }
@@ -143,15 +145,15 @@ namespace IamUsingIt.Context
 
             foreach (var user in roleUsers)
             {
-                this.RemoveFromRole(userManager, user.Id, role.Name);
+                RemoveFromRole(userManager, user.Id, role.Name);
             }
             context.Roles.Remove(role);
             context.SaveChanges();
         }
 
-        public System.Data.Entity.DbSet<IamUsingIt.Models.Resource> Resources { get; set; }
+        public DbSet<Resource> Resources { get; set; }
 
-        public System.Data.Entity.DbSet<IamUsingIt.Models.Reservation> Reservations { get; set; }
+        public DbSet<Reservation> Reservations { get; set; }
         //public icationUser> ApplicationUsers { get; set; }
 
     }
@@ -166,7 +168,7 @@ namespace IamUsingIt.Context
         {
 #if DEBUG
             context.Database.ExecuteSqlCommand(TransactionalBehavior.DoNotEnsureTransaction
-                , string.Format("ALTER DATABASE [{0}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE", context.Database.Connection.Database));
+                , $"ALTER DATABASE [{context.Database.Connection.Database}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE");
 #endif
 
             base.InitializeDatabase(context);

@@ -1,5 +1,4 @@
 ﻿using System;
-using IamUsingIt.Context;
 using IamUsingIt.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;

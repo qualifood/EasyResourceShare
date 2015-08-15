@@ -36,13 +36,12 @@
         </dd>
 
     </dl>
-
-    @using (Html.BeginForm()) {
-        @Html.AntiForgeryToken()
-
-        <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
-        </div>
-    }
+    <div>
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <input type="submit" value="Delete" class="btn btn-default"/>
+            <input type="button" value="Cancel" class="btn btn-default" onclick="location.href='@Url.Action("Index", "Resources")'"/>
+        }
+    </div>
 </div>
