@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using IamUsingIt.Models;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 
@@ -136,7 +137,7 @@ namespace IamUsingIt.Controllers
 
         //
         // GET: /Account/Register
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public ActionResult Register()
         {
             return View();
@@ -145,7 +146,7 @@ namespace IamUsingIt.Controllers
         //
         // POST: /Account/Register
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize(Roles="Admin")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
@@ -158,6 +159,7 @@ namespace IamUsingIt.Controllers
                 try
                 {
                     result = await UserManager.CreateAsync(user, model.Password);
+                    if (result.Succeeded) result = UserManager.AddToRole(user.Id, "User");
                 }
                 catch (DbEntityValidationException e)
                 {
