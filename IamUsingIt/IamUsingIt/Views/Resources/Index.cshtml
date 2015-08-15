@@ -24,6 +24,9 @@
             @Html.DisplayFor(modelItem => item.Name)
         </td>
         <td>
+            @Html.DisplayFor(modelItem => item.Status)
+        </td>
+        <td>
             @if (User.Identity.IsAuthenticated)
             {
                 if (User.IsInRole("Admin"))

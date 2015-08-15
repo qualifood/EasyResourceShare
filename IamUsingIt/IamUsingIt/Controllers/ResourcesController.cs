@@ -20,8 +20,20 @@ namespace IamUsingIt.Controllers
         [Authorize]
         public async Task<ActionResult> Index()
         {
-            var resources = db.Resources;
-            return View(await resources.ToListAsync());
+            var resources = await db.Resources.Include(r=>r.Reservations).ToListAsync();
+            foreach (var resource in resources)
+            {
+                resource.Status = CalculateStatus(resource);
+            }
+            return View(resources);
+        }
+
+        private string CalculateStatus(Resource resource)
+        {
+            if (resource.Reservations.Any(r=> r.Begin <= DateTime.Now && DateTime.Now <= r.End))
+                return "In Use";
+            else
+                return "Free";
         }
 
         // GET: Resources/Create

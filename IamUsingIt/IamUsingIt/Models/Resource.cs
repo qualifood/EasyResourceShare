@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -15,5 +16,9 @@ namespace IamUsingIt.Models
 
         //Properties
         public string Name { get; set; }
+
+        //Calculated Properties
+        [NotMapped]
+        public string Status { get; set; }
     }
 }
