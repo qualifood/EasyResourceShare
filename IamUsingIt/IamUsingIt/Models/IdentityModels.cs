@@ -20,6 +20,7 @@ namespace IamUsingIt.Models
         }
 
         public ICollection<ApplicationUserRole> UserRoles { get; set; }
+        public virtual ICollection<Resource> Resources { get; set; } 
     }
 
     public class ApplicationUserRole : IdentityUserRole

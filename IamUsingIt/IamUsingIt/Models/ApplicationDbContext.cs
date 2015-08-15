@@ -10,8 +10,9 @@ using Microsoft.Owin;
 
 namespace IamUsingIt.Context
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public partial class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
+
         public ApplicationDbContext()
             : base("Sequelizer", throwIfV1Schema: false)
         {
@@ -38,10 +39,25 @@ namespace IamUsingIt.Context
             base.OnModelCreating(modelBuilder);
 
             //Defining the keys and relations
+
+            //Identity stuff
             modelBuilder.Entity<ApplicationUser>().ToTable("AspNetUsers");
             modelBuilder.Entity<ApplicationRole>().HasKey<string>(r => r.Id).ToTable("AspNetRoles");
             modelBuilder.Entity<ApplicationUser>().HasMany<ApplicationUserRole>((ApplicationUser u) => u.UserRoles);
             modelBuilder.Entity<ApplicationUserRole>().HasKey(r => new { UserId = r.UserId, RoleId = r.RoleId }).ToTable("AspNetUserRoles");
+            
+            //Entities
+            modelBuilder.Entity<Resource>().HasKey(r => r.ResourceId).ToTable("Resources");
+            modelBuilder.Entity<Resource>()
+                .HasRequired(r => r.User)
+                .WithMany(u => u.Resources)
+                .HasForeignKey(r => r.UserGuid);
+
+            modelBuilder.Entity<Reservation>().HasKey(r => r.ReservationId).ToTable("Reservations");
+            modelBuilder.Entity<Reservation>()
+                .HasRequired(r => r.Resource)
+                .WithMany(r => r.Reservations)
+                .HasForeignKey(r => r.ResourceId);
         }
 
         public bool Seed(ApplicationDbContext context)
