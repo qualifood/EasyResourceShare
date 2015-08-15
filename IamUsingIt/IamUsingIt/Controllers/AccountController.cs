@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Data.Entity.Validation;
-using System.Globalization;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using IamUsingIt.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using IamUsingIt.Models;
 
 namespace IamUsingIt.Controllers
 {
@@ -138,7 +136,7 @@ namespace IamUsingIt.Controllers
 
         //
         // GET: /Account/Register
-        [AllowAnonymous]
+        [Authorize]
         public ActionResult Register()
         {
             return View();

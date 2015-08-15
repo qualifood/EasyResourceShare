@@ -1,11 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.Configuration;
-using System.Data.Entity;
-using System.Data.Entity.Core.EntityClient;
-using System.Data.SqlClient;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
@@ -25,29 +18,29 @@ namespace IamUsingIt.Models
             // Add custom user claims here
             return userIdentity;
         }
+
+        public ICollection<ApplicationUserRole> UserRoles { get; set; }
     }
 
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class ApplicationUserRole : IdentityUserRole
     {
-        public ApplicationDbContext()
-            : base("Sequelizer", throwIfV1Schema: false)
+        public ApplicationUserRole()
+            : base()
+        { }
+
+        public ApplicationRole Role { get; set; }
+    }
+
+    public class ApplicationRole : IdentityRole
+    {
+        public ApplicationRole() : base() { }
+
+        public ApplicationRole(string name, string description)
+            : base(name)
         {
+            this.Description = description;
         }
 
-        public ApplicationDbContext(string connectionstring)
-            : base(connectionstring, throwIfV1Schema: false)
-        {
-        }
-
-        public static ApplicationDbContext Create()
-        {
-            var result = new ApplicationDbContext();
-#if DEBUG
-            result = new ApplicationDbContext("LocalDebug");
-            Debug.WriteLine(result.Database.Connection.ConnectionString);
-#endif
-
-            return result;
-        }
+        public virtual string Description { get; set; }
     }
 }
