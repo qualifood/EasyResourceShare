@@ -31,6 +31,15 @@
                             }
                         }
                     </li>
+                    <li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            if (User.IsInRole("Admin"))
+                            {
+                                @Html.ActionLink("Add Resource", "Create", "Resources")
+                            }
+                        }
+                    </li>
                     @*<li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
                 </ul>

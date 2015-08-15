@@ -47,12 +47,6 @@ namespace IamUsingIt.Context
             modelBuilder.Entity<ApplicationUserRole>().HasKey(r => new { UserId = r.UserId, RoleId = r.RoleId }).ToTable("AspNetUserRoles");
             
             //Entities
-            modelBuilder.Entity<Resource>().HasKey(r => r.ResourceId).ToTable("Resources");
-            modelBuilder.Entity<Resource>()
-                .HasRequired(r => r.User)
-                .WithMany(u => u.Resources)
-                .HasForeignKey(r => r.UserGuid);
-
             modelBuilder.Entity<Reservation>().HasKey(r => r.ReservationId).ToTable("Reservations");
             modelBuilder.Entity<Reservation>()
                 .HasRequired(r => r.Resource)
@@ -152,6 +146,10 @@ namespace IamUsingIt.Context
             context.Roles.Remove(role);
             context.SaveChanges();
         }
+
+        public System.Data.Entity.DbSet<IamUsingIt.Models.Resource> Resources { get; set; }
+        //public icationUser> ApplicationUsers { get; set; }
+
     }
 
 

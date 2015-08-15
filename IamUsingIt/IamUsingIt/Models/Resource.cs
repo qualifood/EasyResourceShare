@@ -10,10 +10,6 @@ namespace IamUsingIt.Models
         //Primary Key
         public int ResourceId { get; set; } 
 
-        //User Relationship
-        public string UserGuid { get; set; }
-        public ApplicationUser User { get; set; }
-
         //Reservation Relationship
         public ICollection<Reservation> Reservations { get; set; } 
 
