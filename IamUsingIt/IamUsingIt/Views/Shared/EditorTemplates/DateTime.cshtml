@@ -1,4 +1,21 @@
-﻿@model DateTime
+﻿@*@model DateTime
 
-@Html.TextBoxFor(model => model, "{0:dd.MM.yyyy HH:mm}", new { @class = "form-control" })
+@Html.TextBoxFor(model => model, "{0:dd/MM/yyyy HH:mm}", new { @class = "form-control" })*@
+
+@model DateTime?
+@{
+    IDictionary<string, object> htmlAttributes;
+    object objAttributes;
+    if (ViewData.TryGetValue("htmlAttributes", out objAttributes))
+    {
+        htmlAttributes = objAttributes as IDictionary<string, object> ?? HtmlHelper.AnonymousObjectToHtmlAttributes(objAttributes);
+    }
+    else
+    {
+        htmlAttributes = new RouteValueDictionary();
+    }
+    htmlAttributes.Add("type", "datetime");
+    String format = (Request.UserAgent != null && Request.UserAgent.Contains("Chrome")) ? "{0:yyyy-MM-dd HH:mm}" : "{0:dt}";
+    @Html.TextBox("", Model, format, htmlAttributes)
+}
 

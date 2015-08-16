@@ -20,21 +20,24 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Resource.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Begin)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.End)
-        </td>
-        <td>
-            @Html.ActionLink("Delete", "Delete", new { id=item.ReservationId })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Resource.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Begin)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.End)
+            </td>
+            <td>
+                @Html.ActionLink("Delete", "Delete", new {id = item.ReservationId})
+            </td>
+        </tr>
+    }
 
 </table>
+
+@Html.ActionLink("Back", "Index", "Resources")

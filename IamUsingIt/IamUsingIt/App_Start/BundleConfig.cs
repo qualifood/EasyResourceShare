@@ -13,7 +13,7 @@ namespace IamUsingIt
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*",
                         "~/Scripts/jquery.globalize.js",
-                        "~/Scripts/jquery.validate.globalize.js"
+                        "~/Scripts/jquery.globalize.min.js"
                          ));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
