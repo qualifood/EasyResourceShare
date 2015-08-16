@@ -1,62 +1,64 @@
 ﻿<!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8" />
+<head lang="@System.Globalization.CultureInfo.CurrentUICulture.Name">
+    <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    @Styles.Render("~/Content/themes/base/css")
 
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("IamUsingIt", "Index", "Resources", new { area = "" }, new { @class = "navbar-brand" })
-                
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>
-                        @if (User.Identity.IsAuthenticated)
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            @Html.ActionLink("IamUsingIt", "Index", "Resources", new {area = ""}, new {@class = "navbar-brand"})
+
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        if (User.IsInRole("Admin"))
                         {
-                            if (User.IsInRole("Admin"))
-                            {
-                                @Html.ActionLink("Register new User", "Register", "Account")
-                            }
+                            @Html.ActionLink("Register new User", "Register", "Account")
                         }
-                    </li>
-                    <li>
-                        @if (User.Identity.IsAuthenticated)
+                    }
+                </li>
+                <li>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        if (User.IsInRole("Admin"))
                         {
-                            if (User.IsInRole("Admin"))
-                            {
-                                @Html.ActionLink("Add Resource", "Create", "Resources")
-                            }
+                            @Html.ActionLink("Add Resource", "Create", "Resources")
                         }
-                    </li>
-                    @*<li>@Html.ActionLink("About", "About", "Home")</li>
+                    }
+                </li>
+                @*<li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
-                </ul>
-                @Html.Partial("_LoginPartial")
-            </div>
+            </ul>
+            @Html.Partial("_LoginPartial")
         </div>
     </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p style="font-size: 75%">IamUsingIt - Licence GPL 2.0 - <a href="http://github.com/Sebasch/EasyResourceShare" class="btn btn-primary btn-sm" style="font-size: 75%">Github</a></p>
-        </footer>
-    </div>
+</div>
+<div class="container body-content">
+    @RenderBody()
+    <hr/>
+    <footer>
+        <p style="font-size: 75%">IamUsingIt - Licence GPL 2.0 - <a href="http://github.com/Sebasch/EasyResourceShare" class="btn btn-primary btn-sm" style="font-size: 75%">Github</a>
+        </p>
+    </footer>
+</div>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+@RenderSection("scripts", required: false)
 </body>
 </html>

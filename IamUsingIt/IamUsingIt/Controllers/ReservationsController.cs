@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using System.Web.Security;
 using IamUsingIt.Models;
 using Microsoft.AspNet.Identity;
+using NodaTime;
 
 namespace IamUsingIt.Controllers
 {
@@ -58,6 +59,7 @@ namespace IamUsingIt.Controllers
             var currentUser = _db.Users.Find(userId);
             reservation.User = currentUser;
             reservation.UserId = userId;
+            if (IsReservationConflicted(reservation)) ModelState.AddModelError("ErrorMessage", "This reservation overlaps with an already existing reservation!");
             if (ModelState.IsValid)
             {
                 _db.Reservations.Add(reservation);
@@ -69,6 +71,24 @@ namespace IamUsingIt.Controllers
             return View(reservation);
         }
 
+        private bool IsReservationConflicted(Reservation reservation)
+        {
+            var resInterval = new Interval(new Instant(reservation.Begin.Ticks), new Instant(reservation.Begin.Ticks));
+            var existingIntervals =
+                _db.Reservations.Where(r => r.ResourceId == reservation.ResourceId)
+                    .Select(r => new Interval(new Instant(r.Begin.Ticks), new Instant(r.End.Ticks)))
+                    .ToList();
+            return existingIntervals.Any(i => Overlaps(i, resInterval));
+        }
+
+        private bool Overlaps(Interval interval, Interval resInterval)
+        {
+            if (interval.Contains(resInterval.Start)) return true;
+            if (interval.Contains(resInterval.End)) return true;
+            if (resInterval.Contains(interval.Start)) return true;
+            if (resInterval.Contains(interval.End)) return true;
+            return false;
+        }
 
 
         // GET: Reservations/Delete/5
