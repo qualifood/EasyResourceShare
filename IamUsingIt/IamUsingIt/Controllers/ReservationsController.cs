@@ -67,15 +67,15 @@ namespace IamUsingIt.Controllers
                 return RedirectToAction("Index", "Resources");
             }
 
-            ViewBag.ResourceId = new SelectList(_db.Resources, "ResourceId", "Name", reservation.ResourceId);
+            reservation.Resource = _db.Resources.Find(reservation.ResourceId);
             return View(reservation);
         }
 
         private bool IsReservationConflicted(Reservation reservation)
         {
-            var resInterval = new Interval(new Instant(reservation.Begin.Ticks), new Instant(reservation.Begin.Ticks));
+            var resInterval = new Interval(new Instant(reservation.Begin.Ticks), new Instant(reservation.End.Ticks));
             var existingIntervals =
-                _db.Reservations.Where(r => r.ResourceId == reservation.ResourceId)
+                _db.Reservations.Where(r => r.ResourceId == reservation.ResourceId).ToList()
                     .Select(r => new Interval(new Instant(r.Begin.Ticks), new Instant(r.End.Ticks)))
                     .ToList();
             return existingIntervals.Any(i => Overlaps(i, resInterval));
