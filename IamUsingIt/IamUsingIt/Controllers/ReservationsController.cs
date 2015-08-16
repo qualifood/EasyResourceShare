@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using IamUsingIt.ExtensionMethods;
 using IamUsingIt.Models;
 using Microsoft.AspNet.Identity;
 using NodaTime;
@@ -40,8 +41,8 @@ namespace IamUsingIt.Controllers
             var model = new Reservation
             {
                 Resource = resource,
-                Begin = DateTime.Now,
-                End = DateTime.Now.AddHours(3)
+                Begin = DateTime.Now.ConvertToUserTime(),
+                End = DateTime.Now.AddHours(3).ConvertToUserTime()
             };
             return View(model);
         }

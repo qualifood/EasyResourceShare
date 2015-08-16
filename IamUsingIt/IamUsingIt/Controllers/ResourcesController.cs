@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using IamUsingIt.ExtensionMethods;
 using IamUsingIt.Models;
 
 namespace IamUsingIt.Controllers
@@ -29,7 +30,7 @@ namespace IamUsingIt.Controllers
         private string CalculateUser(Resource resource)
         {
             var reservation =
-                resource.Reservations.SingleOrDefault(r => r.Begin <= DateTime.Now && DateTime.Now <= r.End);
+                resource.Reservations.SingleOrDefault(r => r.Begin <= DateTime.Now.ConvertToUserTime() && DateTime.Now.ConvertToUserTime() <= r.End);
             return reservation?.Username;
         }
 

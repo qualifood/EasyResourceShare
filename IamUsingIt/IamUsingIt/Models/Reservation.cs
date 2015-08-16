@@ -24,6 +24,8 @@ namespace IamUsingIt.Models
         public DateTime Begin { get; set; }
 
         [Required]
+        [DataType(DataType.DateTime)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd.MM.yyyy HH:mm}")]
         public DateTime End { get; set; }
 
         //Unmapped Properties
