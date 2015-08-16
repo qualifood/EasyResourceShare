@@ -112,7 +112,7 @@ namespace IamUsingIt.Models
             {
                 Resource = resource,
                 Begin = DateTime.Now,
-                End = DateTime.Now.AddHours(3),
+                End = DateTime.Now.AddYears(2),
                 User = user
             };
             context.Reservations.Add(reservation);
