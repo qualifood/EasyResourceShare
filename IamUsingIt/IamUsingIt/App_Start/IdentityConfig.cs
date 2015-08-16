@@ -93,10 +93,6 @@ namespace IamUsingIt
         {
         }
 
-        public override Task<SignInStatus> PasswordSignInAsync(string userName, string password, bool isPersistent, bool shouldLockout)
-        {
-            return base.PasswordSignInAsync(userName, password, isPersistent, shouldLockout);
-        }
 
         public override Task<ClaimsIdentity> CreateUserIdentityAsync(ApplicationUser user)
         {

@@ -174,11 +174,11 @@ namespace IamUsingIt.Models
             context.SaveChanges();
         }
 
+        // ReSharper disable once UnusedAutoPropertyAccessor.Global
         public DbSet<Resource> Resources { get; set; }
 
+        // ReSharper disable once UnusedAutoPropertyAccessor.Global
         public DbSet<Reservation> Reservations { get; set; }
-        //public icationUser> ApplicationUsers { get; set; }
-
     }
 
 

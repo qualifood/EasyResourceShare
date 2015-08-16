@@ -9,6 +9,7 @@ namespace IamUsingIt.Models
         public int ResourceId { get; set; } 
 
         //Reservation Relationship
+        // ReSharper disable once UnusedAutoPropertyAccessor.Global
         public ICollection<Reservation> Reservations { get; set; } 
 
         //Properties

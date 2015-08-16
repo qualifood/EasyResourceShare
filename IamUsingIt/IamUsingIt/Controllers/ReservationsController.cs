@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using System.Web.Security;
 using IamUsingIt.Models;
 using Microsoft.AspNet.Identity;
 using NodaTime;
@@ -111,7 +110,7 @@ namespace IamUsingIt.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int? id)
         {
-            var reservation = _db.Reservations.Include(r=>r.Resource).FirstOrDefault(r=>r.ResourceId == id);
+            var reservation = _db.Reservations.Include(r=>r.Resource).FirstOrDefault(r=>r.ReservationId == id);
             if (reservation == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);

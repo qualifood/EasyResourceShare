@@ -9,9 +9,9 @@ namespace IamUsingIt.Models
     public class IndexViewModel
     {
         public bool HasPassword { get; set; }
+        // ReSharper disable once UnusedAutoPropertyAccessor.Global
         public IList<UserLoginInfo> Logins { get; set; }
-        public string PhoneNumber { get; set; }
-        public bool TwoFactor { get; set; }
+        // ReSharper disable once UnusedAutoPropertyAccessor.Global
         public bool BrowserRemembered { get; set; }
     }
 
@@ -19,11 +19,6 @@ namespace IamUsingIt.Models
     {
         public IList<UserLoginInfo> CurrentLogins { get; set; }
         public IList<AuthenticationDescription> OtherLogins { get; set; }
-    }
-
-    public class FactorViewModel
-    {
-        public string Purpose { get; set; }
     }
 
     public class SetPasswordViewModel

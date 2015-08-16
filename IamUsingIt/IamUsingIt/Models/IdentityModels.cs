@@ -9,8 +9,6 @@ namespace IamUsingIt.Models
     // You can add profile data for the user by adding more properties to your ApplicationUser class, please visit http://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
     public class ApplicationUser : IdentityUser
     {
-
-
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
@@ -19,29 +17,28 @@ namespace IamUsingIt.Models
             return userIdentity;
         }
 
+        // ReSharper disable once UnusedAutoPropertyAccessor.Global
         public ICollection<ApplicationUserRole> UserRoles { get; set; }
-        public virtual ICollection<Reservation> Reservations { get; set; } 
+        // ReSharper disable once UnusedAutoPropertyAccessor.Global
+        public ICollection<Reservation> Reservations { get; set; } 
     }
 
+    // ReSharper disable once ClassNeverInstantiated.Global
     public class ApplicationUserRole : IdentityUserRole
     {
-        public ApplicationUserRole()
-            : base()
-        { }
-
+        // ReSharper disable once UnusedAutoPropertyAccessor.Global
         public ApplicationRole Role { get; set; }
     }
 
-    public class ApplicationRole : IdentityRole
+    public sealed class ApplicationRole : IdentityRole
     {
-        public ApplicationRole() : base() { }
+        public ApplicationRole()
+        { }
 
+        // ReSharper disable once UnusedParameter.Local
         public ApplicationRole(string name, string description)
             : base(name)
         {
-            this.Description = description;
         }
-
-        public virtual string Description { get; set; }
     }
 }
