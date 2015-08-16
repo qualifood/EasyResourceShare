@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using System.Web.Security;
 using IamUsingIt.Models;
 using Microsoft.AspNet.Identity;
 
@@ -87,13 +88,29 @@ namespace IamUsingIt.Controllers
 
         // POST: Reservations/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmed(int? id)
         {
-            Reservation reservation = await _db.Reservations.FindAsync(id);
-            _db.Reservations.Remove(reservation);
-            await _db.SaveChangesAsync();
-            return RedirectToAction("Index", "Resources");
+            var reservation = _db.Reservations.Include(r=>r.Resource).FirstOrDefault(r=>r.ResourceId == id);
+            if (reservation == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var userId = User.Identity.GetUserId();
+
+            var isAdmin = User.IsInRole("Admin");
+            if (reservation.UserId != userId && !isAdmin) ModelState.AddModelError("ErrorMessage", "This Reservation does not belong to you!");
+            if (ModelState.IsValid)
+            {
+                _db.Reservations.Remove(reservation);
+                await _db.SaveChangesAsync();
+                return RedirectToAction("Index", "Resources");
+            }
+            else
+            {
+                return View(reservation);
+            }
         }
 
         protected override void Dispose(bool disposing)

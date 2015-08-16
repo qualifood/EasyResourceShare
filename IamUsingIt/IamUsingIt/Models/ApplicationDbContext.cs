@@ -70,29 +70,52 @@ namespace IamUsingIt.Models
 
             ApplicationUserManager userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(context));
 
+            //admin
             ApplicationUser adminUser = new ApplicationUser
             {
                 UserName = "admin",
                 Email = "none@none.com"
             };
+            userManager.Create(adminUser, "Demo123!");
+            success=AddUserToRole(userManager, adminUser.Id, "Admin");
 
+            //demoUser1
+            var user = new ApplicationUser
+            {
+                UserName = "demoUser1",
+                Email = "none@none.com"
+            };
+            userManager.Create(user, "Demo123!");
+            success = success && AddUserToRole(userManager, user.Id, "User");
 
-            userManager.Create(adminUser, "Test123!");
+            //demoUser2
+            var user2 = new ApplicationUser
+            {
+                UserName = "demoUser2",
+                Email = "none@none.com"
+            };
+            userManager.Create(user2, "Demo123!");
+            success = success && AddUserToRole(userManager, user2.Id, "User");
 
-            AddUserToRole(userManager, adminUser.Id, "Admin");
-
-            var user = new ApplicationUser();
-
-            user.UserName = "user";
-            user.Email = "none@none.com";
-
-            userManager.Create(user, "Test123!");
-
-            success = AddUserToRole(userManager, user.Id, "User");
-
+            //DemoResource1
             var resource = new Resource();
-            resource.Name = "TestResource";
+            resource.Name = "DemoResource1";
             context.Resources.Add(resource);
+
+            //DemoResource2
+            var resource2 = new Resource();
+            resource2.Name = "DemoResource2";
+            context.Resources.Add(resource2);
+
+            //DemoReservation
+            var reservation = new Reservation()
+            {
+                Resource = resource,
+                Begin = DateTime.Now,
+                End = DateTime.Now.AddHours(3),
+                User = user
+            };
+            context.Reservations.Add(reservation);
             context.SaveChanges();
 
             return success;

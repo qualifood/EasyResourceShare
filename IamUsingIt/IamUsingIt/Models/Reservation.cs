@@ -11,7 +11,7 @@ namespace IamUsingIt.Models
 
         //Resource Relationship
         public int ResourceId { get; set; }
-        public Resource Resource { get; set; } 
+        public Resource Resource { get; set; }
 
         //UserRelationShip
         public ApplicationUser User { get; set; }
@@ -20,6 +20,7 @@ namespace IamUsingIt.Models
         //Properties
         [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy HH:mm}", ApplyFormatInEditMode = true)]
         public DateTime Begin { get; set; }
+
         [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy HH:mm}", ApplyFormatInEditMode = true)]
         public DateTime End { get; set; }
 
@@ -29,5 +30,8 @@ namespace IamUsingIt.Models
 
         [NotMapped]
         public string ResourceName => Resource.Name;
+
+        [NotMapped]
+        public string ErrorMessage { get; set; }
     }
 }
