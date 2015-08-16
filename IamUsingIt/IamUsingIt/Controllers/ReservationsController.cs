@@ -10,12 +10,12 @@ using Microsoft.AspNet.Identity;
 
 namespace IamUsingIt.Controllers
 {
+    [Authorize]
     public class ReservationsController : Controller
     {
         private readonly ApplicationDbContext _db = new ApplicationDbContext();
 
         // GET: Reservations
-        [Authorize]
         public async Task<ActionResult> Index(int? resourceId)
         {
             if (resourceId == null)
@@ -88,7 +88,6 @@ namespace IamUsingIt.Controllers
 
         // POST: Reservations/Delete/5
         [HttpPost, ActionName("Delete")]
-        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int? id)
         {

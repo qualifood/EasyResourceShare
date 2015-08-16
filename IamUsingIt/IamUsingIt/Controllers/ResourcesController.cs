@@ -8,12 +8,12 @@ using IamUsingIt.Models;
 
 namespace IamUsingIt.Controllers
 {
+    [Authorize]
     public class ResourcesController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Resources
-        [Authorize]
         public async Task<ActionResult> Index()
         {
             var resources = await db.Resources.Include(r=>r.Reservations.Select(re=>re.User)).ToListAsync();
