@@ -23,7 +23,7 @@ namespace IamUsingIt.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var reservations = _db.Reservations.Include(r => r.Resource).Where(r=>r.ResourceId==resourceId);
+            var reservations = _db.Reservations.Include(r => r.Resource).Include(r=>r.User).Where(r=>r.ResourceId==resourceId);
             return View(await reservations.ToListAsync());
         }
 

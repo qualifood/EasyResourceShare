@@ -12,6 +12,9 @@
             @Html.DisplayNameFor(model => model.Resource.Name)
         </th>
         <th>
+            @Html.DisplayNameFor(model => model.Username)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.Begin)
         </th>
         <th>
@@ -25,6 +28,9 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Resource.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Username)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Begin)
